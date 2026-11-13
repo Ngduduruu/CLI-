@@ -1,18 +1,123 @@
+* { box-sizing: border-box; }
+
 body {
-    background: #333;
-    padding: 5em 0 0 2em;
-    display: flex;
-    justify-content: flex-start;
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 50% 50%, #3a3a3d, #121212);
 }
+
+/* ---------- Device (everything inside scales with its width via cqw) ---------- */
+.device {
+    container-type: inline-size;
+    width: min(430px, 92vw, calc(92vh * 430 / 932));   /* 15 Pro Max proportions */
+    aspect-ratio: 430 / 932;
+}
+
+.phone {
+    position: relative;
+    height: 100%;
+    padding: 1.4cqw;
+    border-radius: 13cqw;
+    background: linear-gradient(145deg, #8d8d92, #4a4a4e 40%, #77777c);   /* natural titanium */
+    box-shadow: 0 3cqw 10cqw rgba(0, 0, 0, .6);
+}
+
+/* side buttons */
+.phone::before,
+.phone::after {
+    content: "";
+    position: absolute;
+    width: .5cqw;
+    background: #6b6b70;
+}
+
+
+.phone::before { left: -.7cqw; top: 26cqw; height: 4%; border-radius: .5cqw 0 0 .5cqw; }  /* volume */
+.phone::after  { right: -.7cqw; top: 60cqw; height: 16cqw; border-radius: 0 .5cqw .5cqw 0; } /* power */
+
+.screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 11.6cqw;
+    background: linear-gradient(180deg, #1c1c1e, #0b0b0c);
+    padding: 24cqw 4cqw 0;
+}
+
+/* ---------- Dynamic Island, status bar, home indicator ---------- */
+.island {
+    position: absolute;
+    top: 2.6cqw;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 29cqw;
+    height: 8.4cqw;
+    background: #000;
+    border-radius: 10cqw;
+}
+
+.statusbar {
+    position: absolute;
+    top: 3.4cqw;
+    left: 0;
+    right: 0;
+    padding: 0 8cqw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font: 600 3.7cqw/1 -apple-system, "SF Pro Text", system-ui, sans-serif;
+}
+.status-right { display: flex; align-items: center; gap: 1.6cqw; }
+
+.battery {
+    position: relative;
+    width: 6.2cqw;
+    height: 3cqw;
+    border: .3cqw solid rgba(255, 255, 255, .5);
+    border-radius: 1cqw;
+}
+.battery::before {              /* charge level */
+    content: "";
+    position: absolute;
+    inset: .35cqw;
+    background: #fff;
+    border-radius: .5cqw;
+}
+
+.home-indicator {
+    position: absolute;
+    bottom: 2cqw;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 34cqw;
+    height: 1.3cqw;
+    background: rgba(255, 255, 255, .9);
+    border-radius: 1cqw;
+}
+
+.Introduction {
+    font-family: ui-monospace, "SF Mono", Menlo, "Courier New", monospace;
+    font-size: 3.9cqw;
+    line-height: 1.5;
+    padding: 4cqw;
+    background: #2c2c2e;                       /* iOS dark card */
+    border-radius: 5cqw;
+}
+
+.Introduction p:last-child { margin-bottom: 0; }
 
 .Introduction p {
     color: #fff;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 1.2rem;
-    margin: 0 0 .4em;
+    margin: 0 0 1.1em;
 }
 
 .prompt {
+    display: block;
+    margin-bottom: .15em;
     color: #33ff33;
 }
 
@@ -34,7 +139,7 @@ body {
 .line1 .cd {
     animation:
         type-cd 1.2s steps(12, end) .5s forwards,
-        blink-caret .75s step-end 0s 3 forwards;
+        blink-caret .75s step-end 3 forwards;
 }
 
 /* Line 2: appears 2.25s, types 2.75s-4.75s, caret blinks until 6.0s */
