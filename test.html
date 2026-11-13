@@ -6,46 +6,176 @@
     <meta name="description" content="The portfolio of Roger Ng">
     <meta name="author" content="Roger Ng">
     <link rel="stylesheet" href="css/test.css">
-    <link rel="icon" type="img/favicon" size="32x32" href="img/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
     <title>Roger Ng — CS @ UTS</title>
 </head>
 <body>
-    <div class="device">
-        <div class="phone">
-            <div class="screen">
-                <div class="island"></div>
-                <div class="statusbar">
-                    <span>9:41</span>
-                    <span class="status-right">5G <i class="battery"></i></span>
-                </div>
+<div class="device">
+ <div class="phone">
+  <div class="screen">
+    <div class="island"></div>
+    <div class="statusbar">
+        <span id="clock">9:41</span>
+        <span class="status-right">5G <i class="battery"></i></span>
+    </div>
 
-                <div class="Introduction">
-                    <p class="line1">
-                        <span class="prompt">C:\Users\Roger&gt;</span>
-                        <span class="cd">cd Portfolio</span>
-                    </p>
-                    <p class="line2">
-                        <span class="prompt">C:\Users\Roger\Portfolio&gt;</span>
-                        <span class="boot">Booting up system....</span>
-                    </p>
-                    <p class="line3">
-                        <span class="prompt">C:\Users\Roger\Portfolio&gt;</span>
-                        <span class="patch">Patching....</span>
-                    </p>
-                    <p class="line4">
-                        <span class="prompt">C:\Users\Roger\Portfolio&gt;</span>
-                        <span class="initialise">Initialising....</span>
-                    </p>
-                    <p class="line5">
-                        <span class="prompt">C:\Users\Roger\Portfolio&gt;</span>
-                        <span class="complete">System online. Welcome back Roger!</span>
-                    </p>   
-                </div>
+    <!-- 1. Start-up animation: logo, then "hello" in different languages -->
+    <div class="bootscreen" aria-hidden="true">
+        <svg class="logo" viewBox="0 0 64 64">
+            <path d="M14 20 L32 32 L14 44" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="36" y="42" width="16" height="6" rx="2" fill="#fff"/>
+        </svg>
+        <div class="progress"><i></i></div>
+        <div class="hello" id="hello"></div>
+    </div>
 
-                <div class="home-indicator"></div>
+    <!-- 1b. Lock screen -->
+    <div class="lockscreen" id="lockscreen">
+        <div class="lock-date" id="lockdate"></div>
+        <div class="lock-time" id="locktime"></div>
+        <div class="lock-hint">Swipe up to open</div>
+    </div>
 
-            </div>
+    <!-- 2. Home screen -->
+    <div class="homescreen">
+        <div class="widget">
+            <small>Welcome back</small>
+            <strong>Roger Ng</strong>
+            <span>CS @ UTS</span>
+        </div>
+        <div class="grid">
+            <button class="appicon" data-app="about"    style="--c1:#5ac8fa;--c2:#0a84ff"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.5 3.6-7 8-7s8 2.5 8 7z"/></svg><span>About</span></button>
+            <button class="appicon" data-app="projects" style="--c1:#ffd60a;--c2:#ff9f0a"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Projects</span></button>
+            <button class="appicon" data-app="skills"   style="--c1:#bf5af2;--c2:#5e5ce6"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg><span>Skills</span></button>
+            <button class="appicon" data-app="contact"  style="--c1:#30d158;--c2:#0a9d58"><svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v.5l-9 6-9-6zM3 9l9 6 9-6v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Contact</span></button>
         </div>
     </div>
+
+    <!-- 3. App screens (placeholder content: replace with your own) -->
+    <section class="app" id="app-about">
+        <h2>About</h2>
+        <p>Write two or three sentences about what you study, what you build, and what you want to work on next.</p>
+    </section>
+    <section class="app" id="app-projects">
+        <h2>Projects</h2>
+        <ul>
+            <li><strong>Project one</strong><span>One line on what it does and the tech used.</span></li>
+            <li><strong>Project two</strong><span>One line on what it does and the tech used.</span></li>
+            <li><strong>Project three</strong><span>One line on what it does and the tech used.</span></li>
+        </ul>
+    </section>
+    <section class="app" id="app-skills">
+        <h2>Skills</h2>
+        <div class="chips"><b>Python</b><b>Java</b><b>HTML/CSS</b><b>JavaScript</b><b>SQL</b><b>Git</b></div>
+    </section>
+    <section class="app" id="app-contact">
+        <h2>Contact</h2>
+        <ul>
+            <li><strong>Email</strong><a href="mailto:you@example.com">you@example.com</a></li>
+            <li><strong>GitHub</strong><a href="https://github.com/">github.com/your-username</a></li>
+            <li><strong>LinkedIn</strong><a href="https://www.linkedin.com/">linkedin.com/in/your-name</a></li>
+        </ul>
+    </section>
+
+    <button class="home-indicator" id="homebar" aria-label="Home"></button>
+  </div>
+ </div>
+</div>
+
+<script>
+(function () {
+    var screen = document.querySelector(".screen");
+    var hello = document.getElementById("hello");
+    var state = "boot";          // boot -> lock -> home
+
+    var greetings = ["hello", "hola", "bonjour", "你好", "こんにちは", "안녕하세요", "ciao", "namaste"];
+
+    function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    function goLock() {
+        if (state !== "boot") return;
+        state = "lock";
+        screen.classList.add("lock");
+    }
+    function goHome() {
+        if (state === "home") return;
+        state = "home";
+        screen.classList.add("lock", "home");
+    }
+    function closeApps() {
+        var open = document.querySelector(".app.open");
+        if (open) open.classList.remove("open");
+        return !!open;
+    }
+
+    // Start-up: black -> logo + progress bar -> greetings -> lock screen
+    async function startUp() {
+        await sleep(600);  if (state !== "boot") return;
+        screen.classList.add("logo-in");
+        await sleep(3000); if (state !== "boot") return;
+        screen.classList.remove("logo-in");
+        await sleep(1000);
+        for (var i = 0; i < greetings.length; i++) {
+            if (state !== "boot") return;
+            hello.textContent = greetings[i];
+            hello.classList.remove("pop");
+            void hello.offsetWidth;          // restart the animation
+            hello.classList.add("pop");
+            await sleep(700);
+        }
+        goLock();
+    }
+
+    // Tap: skip the boot, or unlock from the lock screen
+    screen.addEventListener("click", function () {
+        if (state === "boot") goLock();
+        else if (state === "lock") goHome();
+    });
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" || e.key === "Enter") {
+            if (closeApps()) return;
+            if (state === "boot") goLock();
+            else if (state === "lock") goHome();
+        }
+    });
+
+    // Swipe up on the lock screen to unlock
+    var startY = null, lockEl = document.getElementById("lockscreen");
+    lockEl.addEventListener("pointerdown", function (e) { startY = e.clientY; });
+    lockEl.addEventListener("pointerup", function (e) {
+        if (startY !== null && startY - e.clientY > 40) goHome();
+        startY = null;
+    });
+
+    // Open apps from icons; home bar closes them (or unlocks)
+    document.querySelectorAll(".appicon").forEach(function (b) {
+        b.addEventListener("click", function () {
+            document.getElementById("app-" + b.dataset.app).classList.add("open");
+        });
+    });
+    document.getElementById("homebar").addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (closeApps()) return;
+        if (state === "boot") goLock();
+        else if (state === "lock") goHome();
+    });
+
+    // Reduced motion: skip everything
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) goHome();
+    else startUp();
+
+    // Live clock + date (status bar and lock screen)
+    function tick() {
+        var now = new Date();
+        var t = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true })
+            .replace(/\s?[AP]M/i, "");
+        document.getElementById("clock").textContent = t;
+        document.getElementById("locktime").textContent = t;
+        document.getElementById("lockdate").textContent =
+            now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
+    }
+    tick();
+    setInterval(tick, 20000);
+})();
+</script>
 </body>
 </html>
